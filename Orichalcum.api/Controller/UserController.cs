@@ -21,13 +21,32 @@ namespace Orichalcum.Api.Controller
         // Только Admin видит всех пользователей
         [Authorize(Roles = "Admin")]
         [HttpGet]
+        [Authorize(Roles = "Admin")]
+        [HttpGet]
         public IActionResult GetAllUsers()
         {
             var users = _userActions.GetAllUsersAction();
-            return Ok(users);
+            return Ok(users.Select(u => new {
+                id = u.Id,
+                userName = u.UserName,
+                email = u.Email,
+                bio = u.Bio,
+                avatarUrl = u.AvatarUrl,
+                firstName = u.FirstName,
+                lastName = u.LastName,
+                role = u.Role,
+                isActive = u.IsActive
+            }));
         }
 
-
+        [Authorize(Roles = "Admin")]
+        [HttpDelete("{id}/permanent")]
+        public IActionResult HardDeleteUser(int id)
+        {
+            var deleted = _userActions.HardDeleteUserAction(id);
+            if (!deleted) return NotFound();
+            return Ok(new { Message = "User permanently deleted" });
+        }
 
         // Авторизованный пользователь видит профиль по id
         [Authorize]

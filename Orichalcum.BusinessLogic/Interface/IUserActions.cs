@@ -24,5 +24,7 @@ namespace Orichalcum.BusinessLogic.Interface
 
         UserDto? UpdateUserAction(int id, UpdateUserDto dto);
 
+        bool HardDeleteUserAction(int id);
+
     }
 }

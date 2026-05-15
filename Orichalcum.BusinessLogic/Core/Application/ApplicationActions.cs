@@ -78,5 +78,38 @@ namespace Orichalcum.BusinessLogic.Core.Application
                 return app;
             }
         }
+        public ApplicationData? ExecuteUpdateStatusAction(int id, int status)
+        {
+            using (var db = new DatabaseContext())
+            {
+                // 1. Ищем заявку
+                var app = db.Applications.FirstOrDefault(a => a.Id == id);
+                if (app == null) return null;
+
+                // 2. Если мы пытаемся одобрить игрока, давай проверим лимит еще раз (на всякий случай)
+                if (status == (int)ApplicationStatus.Approved)
+                {
+                    var session = db.GameSessions.FirstOrDefault(s => s.Id == app.GameSessionId);
+                    var approvedCount = db.Applications.Count(a =>
+                        a.GameSessionId == app.GameSessionId &&
+                        a.Status == ApplicationStatus.Approved);
+
+                    if (session != null && approvedCount >= session.MaxPlayers)
+                    {
+                        // Можно либо вернуть null, либо выбросить исключение, 
+                        // что мест больше нет
+                        return null;
+                    }
+                }
+
+                // 3. Обновляем статус и время
+                app.Status = (ApplicationStatus)status;
+                app.UpdatedAt = DateTime.Now;
+
+                db.SaveChanges();
+                return app;
+            }
+        }
+
     }
 }

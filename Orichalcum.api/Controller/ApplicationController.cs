@@ -55,5 +55,19 @@ namespace Orichalcum.Api.Controller
             if (updated == null) return NotFound();
             return Ok(updated);
         }
+        [Authorize(Roles = "GameMaster,Admin,Moderator")]
+        [HttpPut("{id}/status")]
+        public IActionResult UpdateApplicationStatus(int id, [FromBody] int status)
+        {
+            var application = new Orichalcum.Domains.Entities.Application.ApplicationData
+            {
+                Status = (Orichalcum.Domains.Enums.ApplicationStatus)status
+            };
+            var updated = _applicationActions.UpdateApplicationAction(id, application);
+            if (updated == null) return NotFound();
+            return Ok(updated);
+        }
+
+
     }
 }

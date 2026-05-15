@@ -22,7 +22,6 @@ namespace Orichalcum.Domains.Entities.GameNote
         [StringLength(100)]
         public string? Header { get; set; }
 
-        [StringLength(5000)]
         public string? BodyText { get; set; }
 
         public bool IsVisibleToPlayers { get; set; }

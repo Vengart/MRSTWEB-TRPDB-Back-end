@@ -38,6 +38,8 @@ namespace Orichalcum.BusinessLogic.Functions.User
             return _user == null ? null : ToDto(_user);
         }
 
+        public bool HardDeleteUserAction(int id) =>
+            ExecuteHardDeleteUserAction(id);
 
         private UserDto ToDto(UserData u) => new UserDto()
         {
@@ -47,6 +49,7 @@ namespace Orichalcum.BusinessLogic.Functions.User
             Bio = u.Bio,
             AvatarUrl = u.AvatarUrl,
             Role = u.Role,
+            IsActive = u.IsActive,
         };
     }
 }

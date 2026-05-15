@@ -34,7 +34,7 @@ namespace Orichalcum.Domains.Entities.User
         [EmailAddress]
         public string Email { get; set; }
 
-        [StringLength(500)]
+        [StringLength(10000)]
         public string? Bio { get; set; }           // "о себе" — из твоей диаграммы
 
         public string? AvatarUrl { get; set; }     // аватар игрока

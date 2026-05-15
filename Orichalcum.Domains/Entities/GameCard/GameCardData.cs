@@ -24,7 +24,6 @@ namespace Orichalcum.Domains.Entities.GameCard
         [StringLength(100)]
         public string? Title { get; set; }
 
-        [StringLength(5000)]
         public string? Content { get; set; }       // основной текст карточки
 
         public string? CoverImageUrl { get; set; } // обложка карточки

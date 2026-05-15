@@ -85,5 +85,17 @@ namespace Orichalcum.BusinessLogic.Core.User
                 return _user;
             }
         }
+
+        public bool ExecuteHardDeleteUserAction(int id)
+        {
+            using (var db = new DatabaseContext())
+            {
+                var _user = db.Users.FirstOrDefault(x => x.Id == id);
+                if (_user == null) return false;
+                db.Users.Remove(_user);
+                db.SaveChanges();
+                return true;
+            }
+        }
     }
 }

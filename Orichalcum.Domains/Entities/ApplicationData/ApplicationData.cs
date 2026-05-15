@@ -28,5 +28,7 @@ namespace Orichalcum.Domains.Entities.Application
         public int PlayerId { get; set; }
         [JsonIgnore]
         public UserData? Player { get; set; }
+
+
     }
 }

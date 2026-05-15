@@ -13,5 +13,7 @@ namespace Orichalcum.BusinessLogic.Interface
         ApplicationData? CreateApplicationAction(ApplicationData application);
         bool DeleteApplicationAction(int id);
         ApplicationData? UpdateApplicationAction(int id, ApplicationData application);
+
+        ApplicationData UpdateStatusAction(int id, int status);
     }
 }

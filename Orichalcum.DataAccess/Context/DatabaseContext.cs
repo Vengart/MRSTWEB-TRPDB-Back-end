@@ -1,10 +1,11 @@
-﻿using Orichalcum.Domains.Entities.User;
-using Orichalcum.Domains.Entities.GameSession;
+﻿using Microsoft.EntityFrameworkCore;
+using Orichalcum.Domains;
 using Orichalcum.Domains.Entities.Application;
 using Orichalcum.Domains.Entities.GameCard;
-using Orichalcum.Domains.Entities.GameNote;
-using Microsoft.EntityFrameworkCore;
 using Orichalcum.Domains.Entities.GameCard;
+using Orichalcum.Domains.Entities.GameNote;
+using Orichalcum.Domains.Entities.GameSession;
+using Orichalcum.Domains.Entities.User;
 
 
 namespace Orichalcum.DataAccess.Context
@@ -16,6 +17,8 @@ namespace Orichalcum.DataAccess.Context
         public DbSet<ApplicationData> Applications { get; set; }
         public DbSet<GameCardData> GameCards { get; set; }
         public DbSet<GameNoteData> GameNotes { get; set; }
+
+        public DbSet<Availability> Availabilities { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {

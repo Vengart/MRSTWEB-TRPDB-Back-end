@@ -1,13 +1,15 @@
-﻿using Orichalcum.BusinessLogic.Functions.Application;
+﻿using Orichalcum.BusinessLogic.Core.Application;
+using Orichalcum.BusinessLogic.Functions.Application;
 using Orichalcum.BusinessLogic.Functions.Auth;
 using Orichalcum.BusinessLogic.Functions.GameCard;
 using Orichalcum.BusinessLogic.Functions.GameCard;
+using Orichalcum.BusinessLogic.Functions.GameNote;
 using Orichalcum.BusinessLogic.Functions.GameNote;
 using Orichalcum.BusinessLogic.Functions.GameSession;
 using Orichalcum.BusinessLogic.Functions.User;
 using Orichalcum.BusinessLogic.Interface;
 using Orichalcum.DataAccess.Context;
-using Orichalcum.BusinessLogic.Functions.GameNote;
+using Orichalcum.Domains.Entities.Application;
 
 namespace Orichalcum.BusinessLogic
 {
@@ -42,5 +44,8 @@ namespace Orichalcum.BusinessLogic
         {
             return new GameNoteFlow();
         }
+
+        public ApplicationData? UpdateStatusAction(int id, int status) =>
+            new ApplicationActions().ExecuteUpdateStatusAction(id, status);
     }
 }

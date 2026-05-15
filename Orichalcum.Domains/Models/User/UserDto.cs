@@ -13,5 +13,6 @@ namespace Orichalcum.Domains.Models.User
         public string? Bio { get; set; }
         public string? AvatarUrl { get; set; }
         public UserRole Role { get; set; }
+        public bool IsActive { get; set; }
     }
 }

@@ -22,5 +22,11 @@ namespace Orichalcum.BusinessLogic.Functions.Application
 
         public ApplicationData? UpdateApplicationAction(int id, ApplicationData application) =>
             ExecuteUpdateApplicationAction(id, application);
+
+        public ApplicationData? UpdateStatusAction(int id, int status)
+        {
+            // Вызываем тот самый метод, который мы только что написали в экшенах
+            return new ApplicationActions().ExecuteUpdateStatusAction(id, status);
+        }
     }
 }
