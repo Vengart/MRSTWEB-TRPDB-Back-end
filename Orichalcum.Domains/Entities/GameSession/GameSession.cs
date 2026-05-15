@@ -31,6 +31,12 @@ namespace Orichalcum.Domains.Entities.GameSession
 
         public int MaxPlayers { get; set; }     // лимит игроков
 
+        [StringLength(50)]
+        public string? Duration { get; set; }
+
+        [StringLength(100)]
+        public string? Price { get; set; }
+
         public string? CoverImageUrl { get; set; }  // обложка сессии
 
         public SessionStatus Status { get; set; }   // Draft, Open, Closed, Archived

@@ -1,13 +1,15 @@
-﻿using System;
+﻿using Microsoft.EntityFrameworkCore;
+using Orichalcum.DataAccess;
+using Orichalcum.DataAccess.Context;
+using Orichalcum.DataAccess.Context;
+using Orichalcum.Domains.Entities.GameSession;
+using Orichalcum.Domains.Enums;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Orichalcum.DataAccess.Context;
-using Orichalcum.Domains.Entities.GameSession;
-using Orichalcum.Domains.Enums;
-using Orichalcum.DataAccess;
-using Orichalcum.DataAccess.Context;
+using Microsoft.EntityFrameworkCore;
 
 namespace Orichalcum.BusinessLogic.Core.GameSession
 {
@@ -25,7 +27,9 @@ namespace Orichalcum.BusinessLogic.Core.GameSession
         {
             using (var db = new DatabaseContext())
             {
-                return db.GameSessions.FirstOrDefault(x => x.Id == id);
+                return db.GameSessions
+                    .Include(s => s.Applications)
+                    .FirstOrDefault(x => x.Id == id);
             }
         }
 
@@ -38,6 +42,8 @@ namespace Orichalcum.BusinessLogic.Core.GameSession
                     Title = session.Title,
                     Description = session.Description,
                     System = session.System,
+                    Duration = session.Duration,
+                    Price = session.Price,
                     Setting = session.Setting,
                     MaxPlayers = session.MaxPlayers,
                     CoverImageUrl = session.CoverImageUrl,
@@ -73,6 +79,8 @@ namespace Orichalcum.BusinessLogic.Core.GameSession
                 if (_session == null) return null;
                 _session.Title = session.Title;
                 _session.Description = session.Description;
+                _session.Duration = session.Duration;
+                _session.Price = session.Price;
                 _session.System = session.System;
                 _session.Setting = session.Setting;
                 _session.MaxPlayers = session.MaxPlayers;
