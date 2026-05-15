@@ -51,5 +51,7 @@ namespace Orichalcum.Domains.Entities.GameSession
         // Заявки игроков
         [JsonIgnore]
         public List<ApplicationData>? Applications { get; set; }
+
+        public int? GameCardId { get; set; }
     }
 }

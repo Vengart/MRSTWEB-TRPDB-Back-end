@@ -1,7 +1,9 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
 using Orichalcum.DataAccess;
 using Orichalcum.DataAccess.Context;
 using Orichalcum.DataAccess.Context;
+using Orichalcum.Domains.Entities.GameCard;
 using Orichalcum.Domains.Entities.GameSession;
 using Orichalcum.Domains.Enums;
 using System;
@@ -9,7 +11,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Microsoft.EntityFrameworkCore;
+using Orichalcum.Domains.Entities.GameCard;
+using Orichalcum.Domains.Enums;
 
 namespace Orichalcum.BusinessLogic.Core.GameSession
 {
@@ -42,11 +45,11 @@ namespace Orichalcum.BusinessLogic.Core.GameSession
                     Title = session.Title,
                     Description = session.Description,
                     System = session.System,
-                    Duration = session.Duration,
-                    Price = session.Price,
                     Setting = session.Setting,
                     MaxPlayers = session.MaxPlayers,
                     CoverImageUrl = session.CoverImageUrl,
+                    Duration = session.Duration,
+                    Price = session.Price,
                     Status = SessionStatus.Open,
                     ScheduledAt = session.ScheduledAt,
                     GameMasterId = session.GameMasterId,
@@ -55,6 +58,25 @@ namespace Orichalcum.BusinessLogic.Core.GameSession
                 };
                 db.GameSessions.Add(_newSession);
                 db.SaveChanges();
+
+                // Автоматически создаём GameCard для заметок сессии
+                var _card = new GameCardData()
+                {
+                    Title = session.Title,
+                    Content = session.Description,
+                    Type = Orichalcum.Domains.Enums.CardType.Other,
+                    IsPublic = false,
+                    OwnerId = session.GameMasterId,
+                    CreatedAt = DateTime.Now,
+                    UpdatedAt = DateTime.Now,
+                };
+                db.GameCards.Add(_card);
+                db.SaveChanges();
+
+                // Сохраняем id карточки в сессию
+                _newSession.GameCardId = _card.Id;
+                db.SaveChanges();
+
                 return _newSession;
             }
         }
