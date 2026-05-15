@@ -1,0 +1,43 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.14.37012.4
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Orichalcum.Api", "Orichalcum.api\Orichalcum.Api.csproj", "{80995286-8996-4613-81B2-88D61E4E537A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Orichalcum.BusinessLogic", "Orichalcum.BusinessLogic\Orichalcum.BusinessLogic.csproj", "{5C602230-0A86-4718-BA46-FD0626CB3E51}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Orichalcum.Domains", "Orichalcum.Domains\Orichalcum.Domains.csproj", "{88DA1F8A-41B7-4D00-AEB3-F46D8C671E48}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Orichalcum.DataAccess", "Orichalcum.DataAccess\Orichalcum.DataAccess.csproj", "{91DD4F8F-3D47-4CC7-A579-D5D5C93BE69D}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{80995286-8996-4613-81B2-88D61E4E537A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{80995286-8996-4613-81B2-88D61E4E537A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{80995286-8996-4613-81B2-88D61E4E537A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{80995286-8996-4613-81B2-88D61E4E537A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5C602230-0A86-4718-BA46-FD0626CB3E51}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5C602230-0A86-4718-BA46-FD0626CB3E51}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5C602230-0A86-4718-BA46-FD0626CB3E51}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5C602230-0A86-4718-BA46-FD0626CB3E51}.Release|Any CPU.Build.0 = Release|Any CPU
+		{88DA1F8A-41B7-4D00-AEB3-F46D8C671E48}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{88DA1F8A-41B7-4D00-AEB3-F46D8C671E48}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{88DA1F8A-41B7-4D00-AEB3-F46D8C671E48}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{88DA1F8A-41B7-4D00-AEB3-F46D8C671E48}.Release|Any CPU.Build.0 = Release|Any CPU
+		{91DD4F8F-3D47-4CC7-A579-D5D5C93BE69D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{91DD4F8F-3D47-4CC7-A579-D5D5C93BE69D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{91DD4F8F-3D47-4CC7-A579-D5D5C93BE69D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{91DD4F8F-3D47-4CC7-A579-D5D5C93BE69D}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {642F3673-C3BB-4720-8A81-3C048AAAF1D9}
+	EndGlobalSection
+EndGlobal
