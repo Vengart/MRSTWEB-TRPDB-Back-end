@@ -24,13 +24,44 @@ namespace Orichalcum.Api.Controller
             return Ok(sessions);
         }
 
+        [AllowAnonymous]
         [HttpGet("{id}")]
         public IActionResult GetSessionById(int id)
         {
             var session = _gameSessionActions.GetSessionByIdAction(id);
             if (session == null) return NotFound();
-            return Ok(session);
+
+            return Ok(new
+            {
+                id = session.Id,
+                title = session.Title,
+                description = session.Description,
+                system = session.System,
+                setting = session.Setting,
+                maxPlayers = session.MaxPlayers,
+                coverImageUrl = session.CoverImageUrl,
+                duration = session.Duration,
+                price = session.Price,
+                status = session.Status,
+                scheduledAt = session.ScheduledAt,
+                gameMasterId = session.GameMasterId,
+                gameCardId = session.GameCardId,
+                applications = session.Applications?.Select(a => new {
+                    id = a.Id,
+                    status = a.Status,
+                    message = a.Message,
+                    playerId = a.PlayerId,
+                    player = a.Player == null ? null : new
+                    {
+                        id = a.Player.Id,
+                        userName = a.Player.UserName,
+                        avatarUrl = a.Player.AvatarUrl,
+                        bio = a.Player.Bio
+                    }
+                })
+            });
         }
+
         [Authorize]
         [HttpPost]
         public IActionResult CreateSession([FromBody] GameSessionData session)

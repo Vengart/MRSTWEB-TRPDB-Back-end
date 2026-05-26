@@ -18,7 +18,7 @@ namespace Orichalcum.Api.Controller
             _userActions = bl.GetUserActions();
         }
 
-        // Только Admin видит всех пользователей
+        
         [Authorize(Roles = "Admin")]
         [HttpGet]
         [Authorize(Roles = "Admin")]

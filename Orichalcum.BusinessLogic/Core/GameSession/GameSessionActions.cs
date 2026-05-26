@@ -32,6 +32,7 @@ namespace Orichalcum.BusinessLogic.Core.GameSession
             {
                 return db.GameSessions
                     .Include(s => s.Applications)
+                        .ThenInclude(a => a.Player)
                     .FirstOrDefault(x => x.Id == id);
             }
         }
