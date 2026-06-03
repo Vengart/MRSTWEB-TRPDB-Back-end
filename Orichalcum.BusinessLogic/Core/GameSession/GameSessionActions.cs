@@ -1,8 +1,8 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore;
 using Orichalcum.DataAccess;
 using Orichalcum.DataAccess.Context;
-using Orichalcum.DataAccess.Context;
+using Orichalcum.Domains;
+using Orichalcum.Domains.Entities.Application;
 using Orichalcum.Domains.Entities.GameCard;
 using Orichalcum.Domains.Entities.GameSession;
 using Orichalcum.Domains.Enums;
@@ -11,8 +11,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Orichalcum.Domains.Entities.GameCard;
-using Orichalcum.Domains.Enums;
 
 namespace Orichalcum.BusinessLogic.Core.GameSession
 {
@@ -114,6 +112,90 @@ namespace Orichalcum.BusinessLogic.Core.GameSession
                 db.SaveChanges();
                 return _session;
             }
+        }
+
+        public class TimeSlotDto
+        {
+            public TimeSpan Start { get; set; }
+            public TimeSpan End { get; set; }
+        }
+
+        public class AdvancedScheduleDto
+        {
+            public DateTime Date { get; set; }
+            public bool IsGmAvailable { get; set; }
+            public int PlayerCount { get; set; }
+            public List<TimeSlotDto> OverlappingSlots { get; set; } = new();
+            public List<string> AvailableUserNames { get; set; } = new();
+        }
+
+        // Исправленный метод расчета:
+        public List<AdvancedScheduleDto> GetDetailedHeatmap(int sessionId)
+        {
+            List<Availability> availabilities;
+
+            // 1. Получаем данные из базы с помощью корректного DatabaseContext
+            using (var db = new Orichalcum.DataAccess.Context.DatabaseContext())
+            {
+                availabilities = db.Availabilities
+                    .Where(a => a.GameSessionId == sessionId)
+                    .Include(a => a.User)
+                    .ToList();
+            }
+
+            // 2. Группируем по дням уже в оперативной памяти
+            var groupedByDate = availabilities.GroupBy(a => a.Date.Date);
+            var result = new List<AdvancedScheduleDto>();
+
+            foreach (var group in groupedByDate)
+            {
+                var gmRecords = group.Where(a => a.User?.Role == UserRole.GameMaster).ToList();
+                var playerRecords = group.Where(a => a.User?.Role == UserRole.Player).ToList();
+
+                var dto = new AdvancedScheduleDto
+                {
+                    Date = group.Key,
+                    IsGmAvailable = gmRecords.Any(),
+                    PlayerCount = playerRecords.Count,
+                    AvailableUserNames = group.Select(a => a.User?.UserName ?? "Unknown").Distinct().ToList(),
+                    OverlappingSlots = new List<TimeSlotDto>() // Сразу железно инициализируем список, чтобы не было NullReferenceException
+                };
+
+                // 3. Если в этот день есть и ГМ, и игроки — ищем пересечения времени
+                if (gmRecords.Any() && playerRecords.Any())
+                {
+                    foreach (var gmTime in gmRecords)
+                    {
+                        foreach (var playerTime in playerRecords)
+                        {
+                            // Находим пересечение (поздний старт и ранний конец)
+                            TimeSpan overlapStart = gmTime.StartTime > playerTime.StartTime ? gmTime.StartTime : playerTime.StartTime;
+                            TimeSpan overlapEnd = gmTime.EndTime < playerTime.EndTime ? gmTime.EndTime : playerTime.EndTime;
+
+                            // Если пересечение валидно (старт раньше конца)
+                            if (overlapStart < overlapEnd)
+                            {
+                                // Проверяем, нет ли уже точно такого же слота в этот день (чтобы не дублировать)
+                                if (!dto.OverlappingSlots.Any(s => s.Start == overlapStart && s.End == overlapEnd))
+                                {
+                                    dto.OverlappingSlots.Add(new TimeSlotDto
+                                    {
+                                        Start = overlapStart,
+                                        End = overlapEnd
+                                    });
+                                }
+                            }
+                        }
+                    }
+
+                    // Красиво сортируем получившиеся слоты по времени начала
+                    dto.OverlappingSlots = dto.OverlappingSlots.OrderBy(s => s.Start).ToList();
+                }
+
+                result.Add(dto);
+            }
+
+            return result.OrderBy(r => r.Date).ToList();
         }
     }
 }

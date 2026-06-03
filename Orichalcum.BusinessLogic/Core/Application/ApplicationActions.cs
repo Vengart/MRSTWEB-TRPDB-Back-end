@@ -25,18 +25,19 @@ namespace Orichalcum.BusinessLogic.Core.Application
         {
             using (var db = new DatabaseContext())
             {
-                // Проверяем что такой заявки ещё нет
                 if (db.Applications.Any(a =>
                     a.GameSessionId == application.GameSessionId &&
-                    a.PlayerId == application.PlayerId))
+                    a.PlayerId == application.PlayerId &&
+                    a.Status != ApplicationStatus.Rejected))
                     return null;
 
-                // Проверяем лимит игроков
                 var session = db.GameSessions.FirstOrDefault(s => s.Id == application.GameSessionId);
                 if (session == null) return null;
+
                 var approvedCount = db.Applications.Count(a =>
                     a.GameSessionId == application.GameSessionId &&
                     a.Status == ApplicationStatus.Approved);
+
                 if (approvedCount >= session.MaxPlayers) return null;
 
                 var _new = new ApplicationData()
@@ -72,12 +73,32 @@ namespace Orichalcum.BusinessLogic.Core.Application
             {
                 var app = db.Applications.FirstOrDefault(a => a.Id == id);
                 if (app == null) return null;
+
+                // Если отклоняем — удаляем запись чтобы игрок мог подать снова
+                if (application.Status == ApplicationStatus.Rejected)
+                {
+                    var deleted = new ApplicationData()
+                    {
+                        Id = app.Id,
+                        GameSessionId = app.GameSessionId,
+                        PlayerId = app.PlayerId,
+                        Status = ApplicationStatus.Rejected,
+                        Message = app.Message,
+                        CreatedAt = app.CreatedAt,
+                        UpdatedAt = DateTime.Now,
+                    };
+                    db.Applications.Remove(app);
+                    db.SaveChanges();
+                    return deleted;
+                }
+
                 app.Status = application.Status;
                 app.UpdatedAt = DateTime.Now;
                 db.SaveChanges();
                 return app;
             }
         }
+
         public ApplicationData? ExecuteUpdateStatusAction(int id, int status)
         {
             using (var db = new DatabaseContext())

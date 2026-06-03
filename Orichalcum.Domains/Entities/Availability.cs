@@ -1,22 +1,32 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
+using Orichalcum.Domains.Entities.User; // Проверь свои юзинги
 
 namespace Orichalcum.Domains
 {
     public class Availability
     {
+        [Key]
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int Id { get; set; }
+
+        [Required]
         public int GameSessionId { get; set; }
 
-        // ID игрока или мастера (тип string, так как в localStorage у тебя userId)
-        public string PlayerId { get; set; } = string.Empty;
+        [Required]
+        public int UserId { get; set; }
 
-        public DateTime Date { get; set; } // Дата (время будет 00:00:00)
+        [ForeignKey("UserId")]
+        public UserData? User { get; set; }
 
-        public TimeSpan StartTime { get; set; } // Например, 18:00
-        public TimeSpan EndTime { get; set; }   // Например, 22:00
+        [Required]
+        public DateTime Date { get; set; }
+
+        [Required]
+        public TimeSpan StartTime { get; set; }
+
+        [Required]
+        public TimeSpan EndTime { get; set; }
     }
 }
