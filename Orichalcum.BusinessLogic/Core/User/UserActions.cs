@@ -33,7 +33,7 @@ namespace Orichalcum.BusinessLogic.Core.User
                 var _newUser = new UserData()
                 {
                     UserName = user.UserName,
-                    Password = user.Password,
+                    Password = BCrypt.Net.BCrypt.HashPassword(user.Password),
                     Email = user.Email,
                     Bio = user.Bio,
                     AvatarUrl = user.AvatarUrl,
@@ -77,7 +77,8 @@ namespace Orichalcum.BusinessLogic.Core.User
                 if (dto.AvatarUrl != null) _user.AvatarUrl = dto.AvatarUrl;
                 if (dto.FirstName != null) _user.FirstName = dto.FirstName;
                 if (dto.LastName != null) _user.LastName = dto.LastName;
-                if (!string.IsNullOrEmpty(dto.Password)) _user.Password = dto.Password;
+                if (!string.IsNullOrEmpty(dto.Password))
+                    _user.Password = BCrypt.Net.BCrypt.HashPassword(dto.Password);
                 if (dto.Role.HasValue) _user.Role = (UserRole)dto.Role.Value;
 
                 _user.UpdatedAt = DateTime.Now;

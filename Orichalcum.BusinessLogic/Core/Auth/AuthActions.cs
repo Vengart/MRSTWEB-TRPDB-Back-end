@@ -21,11 +21,19 @@ namespace Orichalcum.BusinessLogic.Core.Auth
 
             using (var db = new DatabaseContext())
             {
-                return db.Users.FirstOrDefault(u =>
-                     (u.UserName == data.Login || u.Email == data.Login) &&
-                     u.Password == data.Password &&
-                     u.IsActive == true);
+                var user = db.Users.FirstOrDefault(u =>
+                    (u.UserName == data.Login || u.Email == data.Login) &&
+                    u.IsActive == true);
+
+                if (user == null) return null;
+
+                // Проверяем хеш
+                if (!BCrypt.Net.BCrypt.Verify(data.Password, user.Password))
+                    return null;
+
+                return user;
             }
         }
+
     }
 }
