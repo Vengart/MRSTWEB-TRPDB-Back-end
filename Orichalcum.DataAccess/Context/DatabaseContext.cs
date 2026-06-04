@@ -6,6 +6,7 @@ using Orichalcum.Domains.Entities.GameCard;
 using Orichalcum.Domains.Entities.GameNote;
 using Orichalcum.Domains.Entities.GameSession;
 using Orichalcum.Domains.Entities.User;
+using Orichalcum.Domains.Entities.UserReview;
 
 
 namespace Orichalcum.DataAccess.Context
@@ -17,6 +18,8 @@ namespace Orichalcum.DataAccess.Context
         public DbSet<ApplicationData> Applications { get; set; }
         public DbSet<GameCardData> GameCards { get; set; }
         public DbSet<GameNoteData> GameNotes { get; set; }
+        public DbSet<UserReviewData> UserReviews { get; set; }
+
 
         public DbSet<Availability> Availabilities { get; set; }
 
@@ -68,6 +71,25 @@ namespace Orichalcum.DataAccess.Context
                 .WithMany()
                 .HasForeignKey(n => n.AuthorId)
                 .OnDelete(DeleteBehavior.NoAction);
+
+            modelBuilder.Entity<UserReviewData>().ToTable("UserReviews");
+
+            modelBuilder.Entity<UserReviewData>()
+                .HasOne(r => r.TargetUser)
+                .WithMany()
+                .HasForeignKey(r => r.TargetUserId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            modelBuilder.Entity<UserReviewData>()
+                .HasOne(r => r.AuthorUser)
+                .WithMany()
+                .HasForeignKey(r => r.AuthorUserId)
+                .OnDelete(DeleteBehavior.NoAction);
+
+            // Один пользователь может оставить только одну оценку другому
+            modelBuilder.Entity<UserReviewData>()
+                .HasIndex(r => new { r.TargetUserId, r.AuthorUserId })
+                .IsUnique();
         }
     }
 }

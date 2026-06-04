@@ -10,6 +10,9 @@ using Orichalcum.BusinessLogic.Functions.User;
 using Orichalcum.BusinessLogic.Interface;
 using Orichalcum.DataAccess.Context;
 using Orichalcum.Domains.Entities.Application;
+using Orichalcum.BusinessLogic.Functions.UserReview;
+
+
 
 namespace Orichalcum.BusinessLogic
 {
@@ -43,6 +46,11 @@ namespace Orichalcum.BusinessLogic
         public IGameNoteActions GetGameNoteActions()
         {
             return new GameNoteFlow();
+        }
+
+        public IUserReviewActions GetUserReviewActions()
+        {
+            return new UserReviewFlow();
         }
 
         public ApplicationData? UpdateStatusAction(int id, int status) =>
