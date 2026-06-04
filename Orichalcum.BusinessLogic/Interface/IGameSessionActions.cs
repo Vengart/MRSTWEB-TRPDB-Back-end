@@ -14,5 +14,6 @@ namespace Orichalcum.BusinessLogic.Interface
         GameSessionData? CreateSessionAction(GameSessionData session);
         bool DeleteSessionAction(int id);
         GameSessionData? UpdateSessionAction(int id, GameSessionData session);
+        List<GameSessionData> GetSessionsByUserIdAction(int userId);
     }
 }

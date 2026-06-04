@@ -49,7 +49,7 @@ namespace Orichalcum.Api.Controller
         }
 
         // Авторизованный пользователь видит профиль по id
-        [Authorize]
+        [AllowAnonymous]
         [HttpGet("{id}")]
         public IActionResult GetUserById(int id)
         {

@@ -1,7 +1,11 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Orichalcum.BusinessLogic.Interface;
+using Orichalcum.DataAccess.Context;
 using Orichalcum.Domains.Entities.GameSession;
+using Orichalcum.Domains.Enums;
+
 
 namespace Orichalcum.Api.Controller
 {
@@ -22,6 +26,40 @@ namespace Orichalcum.Api.Controller
         {
             var sessions = _gameSessionActions.GetAllSessionsAction();
             return Ok(sessions);
+        }
+
+        [HttpGet("user/{userId}")]
+        public IActionResult GetSessionsByUserId(int userId)
+        {
+            using (var db = new DatabaseContext())
+            {
+                var sessions = db.GameSessions
+                    .Include(s => s.Applications) // Подгружаем заявки игроков
+                    .Where(session =>
+                        session.GameMasterId == userId ||
+                        (session.Applications != null && session.Applications.Any(a => a.PlayerId == userId && a.Status == ApplicationStatus.Approved))
+                    )
+                    .ToList();
+
+                var result = sessions.Select(session => new
+                {
+                    id = session.Id,
+                    title = session.Title,
+                    description = session.Description,
+                    system = session.System,
+                    setting = session.Setting,
+                    maxPlayers = session.MaxPlayers,
+                    coverImageUrl = session.CoverImageUrl,
+                    duration = session.Duration,
+                    price = session.Price,
+                    status = session.Status,
+                    scheduledAt = session.ScheduledAt,
+                    gameMasterId = session.GameMasterId,
+                    gameCardId = session.GameCardId
+                }).ToList();
+
+                return Ok(result);
+            }
         }
 
         [AllowAnonymous]
@@ -61,6 +99,7 @@ namespace Orichalcum.Api.Controller
                 })
             });
         }
+
 
         [Authorize]
         [HttpPost]

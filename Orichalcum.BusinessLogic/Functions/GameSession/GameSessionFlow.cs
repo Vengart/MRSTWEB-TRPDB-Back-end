@@ -25,5 +25,8 @@ namespace Orichalcum.BusinessLogic.Functions.GameSession
 
         public GameSessionData? UpdateSessionAction(int id, GameSessionData session) =>
             ExecuteUpdateSessionAction(id, session);
+
+        public List<GameSessionData> GetSessionsByUserIdAction(int userId) =>
+            ExecuteGetSessionsByUserIdAction(userId);
     }
 }

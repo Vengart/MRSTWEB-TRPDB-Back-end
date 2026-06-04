@@ -114,6 +114,20 @@ namespace Orichalcum.BusinessLogic.Core.GameSession
             }
         }
 
+        protected List<GameSessionData> ExecuteGetSessionsByUserIdAction(int userId)
+        {
+            using (var db = new DatabaseContext()) // Поменяй на твой способ вызова контекста, если он другой
+            {
+                return db.GameSessions
+                    .Include(s => s.Applications) // Подтягиваем связанные заявки
+                    .Where(session =>
+                        session.GameMasterId == userId ||
+                        (session.Applications != null && session.Applications.Any(a => a.PlayerId == userId && a.Status == ApplicationStatus.Approved))
+                    )
+                    .ToList();
+            }
+        }
+
         public class TimeSlotDto
         {
             public TimeSpan Start { get; set; }
